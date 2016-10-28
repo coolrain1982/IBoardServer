@@ -15,7 +15,12 @@ public class IBoardServer {
 	private ServerSocket server = null;
 	private int port = 0;
 	public static List<IBoardMeeting> iboardMeetingList = new ArrayList<>();
-	private static final Map<String,ClientConnection> userToSockets = new HashMap<>();
+	public static final Map<String,ClientConnection> userToSockets = new HashMap<>();
+	public static final Map<String, Integer>UserRole = new HashMap<>();
+	
+	public static final Object lockUserToSockets = new Object();
+	public static final Object lockIboardMeetingList = new Object();
+	public static final Object lockiUserRole = new Object();
 	
 	public void setPort(int port) {
 		this.port = port;
@@ -69,6 +74,9 @@ public class IBoardServer {
 		} catch (NumberFormatException e) {
 			System.out.println("The second parameter must be integer!");
 		}
+		
+		UserRole.put("teacher1", 1);
+		UserRole.put("student1", 2);
 		
 		IBoardServer iBoardServer = new IBoardServer();
 		//开始启动服务

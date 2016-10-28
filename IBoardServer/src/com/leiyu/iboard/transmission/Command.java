@@ -17,6 +17,8 @@ public class Command {
 
     private int commandId;
     private String command;
+    private String head;
+    private String len;
 
     public String getCommand() {
         return command;
@@ -33,4 +35,29 @@ public class Command {
     public void setCommandId(int commandId) {
         this.commandId = commandId;
     }
+
+	public String getCommandHead() {
+		return head;
+	}
+
+	public void setCommandHead(String commandHead) {
+		this.head = commandHead;
+	}
+
+	public String getLen() {
+		return len;
+	}
+
+	public void setLen(String len) {
+		this.len = len;
+	}
+	
+	public String getAllCommandStr() {
+		StringBuffer sb = new StringBuffer();
+		sb.append(head);
+		sb.append(len);
+		sb.append(command);
+		
+		return sb.toString();
+	}
 }

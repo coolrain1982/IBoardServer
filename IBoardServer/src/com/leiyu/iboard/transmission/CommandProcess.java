@@ -51,6 +51,8 @@ public class CommandProcess {
         Command command = new Command();
         command.setCommand(sb.substring(12, cLen + 4 + 8));
         command.setCommandId(cID);
+        command.setCommandHead(sb.substring(0, 4));
+        command.setLen(sb.substring(4, 12));
 
         sb.delete(0, 12 + cLen);
 
