@@ -28,6 +28,7 @@ public class IBoardServer {
 	
 	public void startServer() throws IOException {
 		server = new ServerSocket(port);
+		System.out.println(String.format("TCP server[%d] start success......", port));
 	}
 	
 	public void run() {
@@ -40,19 +41,23 @@ public class IBoardServer {
 				break;
 			}
 			
+			System.out.println(String.format("TCP client[local-%s  peer-%s] connenct success......", 
+					socket.getLocalSocketAddress().toString(), socket.getRemoteSocketAddress().toString()));
 			//
 			ClientConnection clientConnection = new ClientConnection(socket);
 			clientConnection.start();
 		}
 		
-		Iterator<Entry<String, ClientConnection>> allSockets = userToSockets.entrySet().iterator();
-		while(allSockets.hasNext()) {
-			try {
-				allSockets.next().getValue().getSocket().close();
-			} catch (Exception e) {
-				e.printStackTrace();
+		synchronized (lockUserToSockets) {
+			Iterator<Entry<String, ClientConnection>> allSockets = userToSockets.entrySet().iterator();
+			while(allSockets.hasNext()) {
+				try {
+					allSockets.next().getValue().getSocket().close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
-		}
+		}		
 		
 		//关闭server
 		try {
@@ -60,6 +65,8 @@ public class IBoardServer {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		System.out.println(String.format("TCP server[%d] close", port));
 	}
 
 	public static void main(String[] args) {
