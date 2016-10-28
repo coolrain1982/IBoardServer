@@ -15,7 +15,7 @@ public class IBoardServer {
 	private ServerSocket server = null;
 	private int port = 0;
 	public static List<IBoardMeeting> iboardMeetingList = new ArrayList<>();
-	public static final Map<String,Socket> userToSockets = new HashMap<>();
+	private static final Map<String,ClientConnection> userToSockets = new HashMap<>();
 	
 	public void setPort(int port) {
 		this.port = port;
@@ -34,12 +34,16 @@ public class IBoardServer {
 				e.printStackTrace();
 				break;
 			}
+			
+			//
+			ClientConnection clientConnection = new ClientConnection(socket);
+			clientConnection.start();
 		}
 		
-		Iterator<Entry<String, Socket>> allSockets = userToSockets.entrySet().iterator();
+		Iterator<Entry<String, ClientConnection>> allSockets = userToSockets.entrySet().iterator();
 		while(allSockets.hasNext()) {
 			try {
-				allSockets.next().getValue().close();
+				allSockets.next().getValue().getSocket().close();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

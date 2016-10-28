@@ -14,14 +14,13 @@ public class SocketHandler implements SocketStatusListener {
     private Socket socket = null;
     private ReadTask reader;
     private WriteTask writer;
-    private InterCmdQueue interCmdQueue;
+    private boolean isShutDown = false;
 
     public SocketHandler(Socket socket, InterCmdQueue icq) throws IOException {
         this.socket = socket;
         this.socket.setTcpNoDelay(true);
         reader = new ReadTask(socket, icq);
         writer = new WriteTask(socket, icq);
-        interCmdQueue = icq;
         onSocketStatusChanged(socket, STATUS_OPEN, null);
     }
 
@@ -34,7 +33,7 @@ public class SocketHandler implements SocketStatusListener {
         try {
             writer.finish();
         } catch (Exception e) {
-
+        	
         }
 
         try {
@@ -51,6 +50,8 @@ public class SocketHandler implements SocketStatusListener {
 
         reader = null;
         writer = null;
+        
+        isShutDown = true;
     }
 
     @Override
@@ -64,5 +65,9 @@ public class SocketHandler implements SocketStatusListener {
             default:
                 break;
         }
+    }
+    
+    public boolean isShutDown() {
+    	return isShutDown;
     }
 }
