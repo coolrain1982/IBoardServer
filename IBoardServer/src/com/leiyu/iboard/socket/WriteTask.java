@@ -21,7 +21,6 @@ public class WriteTask extends Thread {
     protected WriteTask(Socket socket, InterCmdQueue icq) throws IOException{
         this.socket = socket;
         this.interCmdQueue = icq;
-        bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
     }
 
     protected void finish() {
@@ -32,17 +31,24 @@ public class WriteTask extends Thread {
         start();
     }
 
-    public synchronized void run() {
+    public void run() {
         while(!isFinish) {
             //从消息队列中取出一条消息，发送出去
             String msg = interCmdQueue.getCmdOut();
             if (msg != null) {
                 try {
+                	bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
                     bw.write(msg);
                     bw.flush();
                 } catch (Exception e) {
                     e.printStackTrace();
                     isFinish = true;
+                } finally {
+                	try {
+                		bw.close(); 
+                	} catch (Exception e) {
+                		
+                	}
                 }
             } else {
                 try {

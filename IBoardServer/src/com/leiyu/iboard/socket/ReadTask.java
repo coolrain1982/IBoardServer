@@ -50,18 +50,20 @@ public class ReadTask extends Thread {
         charArr = null;
     }
 
-    public synchronized void run() {
+    public void run() {
         while (listening) {
             int charLen = 0;
             try {
                 while((charLen = br.read(charArr)) > -1) {
                     sb.append(charArr, 0, charLen);
                 }
-
-                CommandProcess cp = new CommandProcess(sb);
-                Command cmd = cp.getCommand();
-                if (cmd != null) {
-                    interCmdQueue.addCmdIn(cmd);
+                
+                if (sb.length() > 0) {
+                	CommandProcess cp = new CommandProcess(sb);
+	                Command cmd = cp.getCommand();
+	                if (cmd != null) {
+	                    interCmdQueue.addCmdIn(cmd);
+	                }
                 }
 
                 try {
