@@ -54,7 +54,7 @@ public class ReadTask extends Thread {
         while (listening) {
             int charLen = 0;
             try {
-                while((charLen = br.read(charArr)) > -1) {
+                if((charLen = br.read(charArr)) > -1) {
                     sb.append(charArr, 0, charLen);
                 }
                 
