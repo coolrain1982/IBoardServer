@@ -22,6 +22,8 @@ public class IBoardServer {
 	public static final Object lockIboardMeetingList = new Object();
 	public static final Object lockiUserRole = new Object();
 	
+	public static int isDebug = 0;
+	
 	public void setPort(int port) {
 		this.port = port;
 	}
@@ -77,7 +79,13 @@ public class IBoardServer {
 		//第一个参数为端口
 		int port = 0;
 		try {
-			port = Integer.parseInt(args[1]);
+			port = Integer.parseInt(args[0]);
+		} catch (NumberFormatException e) {
+			System.out.println("The first parameter must be integer!");
+		}
+		
+		try {
+			isDebug = Integer.parseInt(args[1]);
 		} catch (NumberFormatException e) {
 			System.out.println("The second parameter must be integer!");
 		}

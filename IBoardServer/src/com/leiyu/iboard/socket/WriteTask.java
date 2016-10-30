@@ -1,5 +1,6 @@
 package com.leiyu.iboard.socket;
 
+import com.leiyu.iboard.IBoardServer;
 import com.leiyu.iboard.transmission.InterCmdQueue;
 
 import java.io.BufferedWriter;
@@ -7,6 +8,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Calendar;
 
 /**
  * Created by leiyu on 2016/10/25.
@@ -45,6 +47,16 @@ public class WriteTask extends Thread {
                     e.printStackTrace();
                     isFinish = true;
                 }
+                
+                if (IBoardServer.isDebug > 0) {
+	                Calendar calendar = Calendar.getInstance();
+	                System.out.println(String.format("%s.%s %s:%s:%s---send to client[%s %s] : %s", 
+	                		calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH),
+	                		calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE),
+	                		calendar.get(Calendar.SECOND), socket.getLocalSocketAddress().toString(),
+	                		socket.getRemoteSocketAddress().toString(), msg));
+                }
+                
             } else {
                 try {
                     Thread.sleep(100);
