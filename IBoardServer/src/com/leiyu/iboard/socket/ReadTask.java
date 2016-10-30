@@ -61,7 +61,7 @@ public class ReadTask extends Thread {
                     sb.append(charArr, 0, charLen);
                 }
                 
-                if (sb.length() > 0) {
+                while (sb.length() > 0) {
                 	CommandProcess cp = new CommandProcess(sb);
 	                Command cmd = cp.getCommand();
 
@@ -76,11 +76,13 @@ public class ReadTask extends Thread {
 		                    		calendar.get(Calendar.SECOND), socket.getLocalSocketAddress().toString(),
 		                    		socket.getRemoteSocketAddress().toString(), cmd.getAllCommandStr()));
 	                    }
+	                } else {
+	                	break;
 	                }
                 }
 
                 try {
-                    Thread.sleep(100);
+                    Thread.sleep(1);
                 } catch (Exception e) {e.printStackTrace();}
 
             } catch (IOException e) {

@@ -59,7 +59,7 @@ public class WriteTask extends Thread {
                 
             } else {
                 try {
-                    Thread.sleep(100);
+                    Thread.sleep(1);
                 } catch (Exception e) {e.printStackTrace();}
             }
         }

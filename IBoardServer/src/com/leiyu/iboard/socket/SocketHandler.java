@@ -18,7 +18,7 @@ public class SocketHandler implements SocketStatusListener {
 
     public SocketHandler(Socket socket, InterCmdQueue icq) throws IOException {
         this.socket = socket;
-        this.socket.setTcpNoDelay(true);
+//        this.socket.setTcpNoDelay(true);
         reader = new ReadTask(socket, icq);
         writer = new WriteTask(socket, icq);
         onSocketStatusChanged(socket, STATUS_OPEN, null);

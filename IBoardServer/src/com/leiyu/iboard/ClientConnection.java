@@ -43,35 +43,37 @@ public class ClientConnection extends Thread {
 		
 		socketHandler.listen();
 		
-		while (!socketHandler.isShutDown()) {
+		main:while (!socketHandler.isShutDown()) {
 			
 			try {
-				Thread.sleep(100);
+				Thread.sleep(1);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			
-			Object o = interCmdQueue.getCmdIn();
-			if (o == null) {
-				continue;
-			}
-			
-			if (!Command.class.isInstance(o)) {
-				continue;
-			}
-			
-			Command command = (Command)o;
-			switch (command.getCommandId()) {
-			case Command.COMMAND_USERID:
-				setUserSocket(command.getCommand().toLowerCase().trim());
-				break;
-			case Command.COMMAND_DRAWSHAPE_START:
-			case Command.COMMAND_DRAWSHAPE_MOVE:
-			case Command.COMMAND_DRAWSHAPE_END:
-				transAShapeToStudents(command);
-				break;
-			default:
-				break;
+			while (true) {
+				Object o = interCmdQueue.getCmdIn();
+				if (o == null) {
+					continue main;
+				}
+				
+				if (!Command.class.isInstance(o)) {
+					continue main;
+				}
+				
+				Command command = (Command)o;
+				switch (command.getCommandId()) {
+				case Command.COMMAND_USERID:
+					setUserSocket(command.getCommand().toLowerCase().trim());
+					break;
+				case Command.COMMAND_DRAWSHAPE_START:
+				case Command.COMMAND_DRAWSHAPE_MOVE:
+				case Command.COMMAND_DRAWSHAPE_END:
+					transAShapeToStudents(command);
+					break;
+				default:
+					break;
+				}
 			}
 		}
 		
@@ -88,6 +90,7 @@ public class ClientConnection extends Thread {
 				0;
 		}
 		
+		System.out.println(String.format("userID = %s, role = %d", userID, role));
 	}
 	
 	private void transAShapeToStudents(Command command) {
