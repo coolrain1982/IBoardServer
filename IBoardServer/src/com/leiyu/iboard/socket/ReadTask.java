@@ -61,6 +61,10 @@ public class ReadTask extends Thread {
                     sb.append(charArr, 0, charLen);
                 }
                 
+                if (charLen == -1) {
+                	throw new SocketException("socket is close");
+                }
+                
                 while (sb.length() > 0) {
                 	CommandProcess cp = new CommandProcess(sb);
 	                Command cmd = cp.getCommand();

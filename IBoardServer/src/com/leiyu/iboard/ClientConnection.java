@@ -78,6 +78,27 @@ public class ClientConnection extends Thread {
 		}
 		
 		interCmdQueue.clear();
+		
+		//把这个连接对应的用户信息删除掉
+		String userID = null;
+		synchronized (IBoardServer.lockUserToSockets) {
+			Iterator<Entry<String, ClientConnection>> it = IBoardServer.userToSockets.entrySet().iterator();
+			while (it.hasNext()) {
+				Entry<String, ClientConnection> scEntry = it.next();
+				if (scEntry.getValue() == this) {
+					IBoardServer.userToSockets.remove(scEntry.getKey());
+					userID = scEntry.getKey();
+				}
+			}
+		}
+		
+		if (userID != null) {
+			synchronized (IBoardServer.lockiUserRole) {
+				if (IBoardServer.UserRole.containsKey(userID)) {
+					IBoardServer.UserRole.remove(userID);
+				}
+			}
+		}
 	}
 	
 	private void setUserSocket(String userID) {
